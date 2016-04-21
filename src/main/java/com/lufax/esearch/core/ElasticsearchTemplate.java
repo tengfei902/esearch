@@ -1,8 +1,10 @@
 package com.lufax.esearch.core;
 
+import static org.apache.commons.lang.StringUtils.isNotBlank;
 import static org.elasticsearch.client.Requests.indicesExistsRequest;
 import static org.elasticsearch.index.VersionType.EXTERNAL;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,12 +16,17 @@ import org.elasticsearch.action.bulk.BulkItemResponse;
 import org.elasticsearch.action.bulk.BulkRequestBuilder;
 import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.index.IndexRequestBuilder;
+import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.common.xcontent.XContentBuilder;
+import org.elasticsearch.search.SearchHit;
+
 import com.lufax.esearch.client.ElasticsearchClientFactory;
 import com.lufax.esearch.config.SearchEntity;
 import com.lufax.esearch.config.SearchEntityRegister;
+import com.lufax.esearch.core.query.DeleteQuery;
 import com.lufax.esearch.core.query.IndexQuery;
+import com.lufax.esearch.core.query.SearchQuery;
 import com.lufax.esearch.exception.ESearchException;
 
 public class ElasticsearchTemplate {
@@ -133,14 +140,70 @@ public class ElasticsearchTemplate {
 		return indexRequestBuilder;
 	}
 	
-	public <T> String delete(Class<T> clazz,String id) {
-		if(null == SearchEntityRegister.findSearchEntity(clazz)) {
-			throw new ESearchException(String.format("Class %s not registered", clazz.getName()));
-		}
-		return delete(SearchEntityRegister.findSearchEntity(clazz).getIndex(),SearchEntityRegister.findSearchEntity(clazz).getType(), id);
-	}
-	
 	public <T> String delete(String index,String type,String id) {
 		return getClient().prepareDelete(index, type, id).execute().actionGet().getId();
+	}
+	
+	public <T> void delete(List<String> ids,String index,String type) {
+		BulkRequestBuilder bulkRequestBuilder = getClient().prepareBulk();
+		for(String id : ids) {
+			bulkRequestBuilder.add(getClient().prepareDelete(index, type, id));
+		}
+		if(bulkRequestBuilder.numberOfActions() > 0) {
+			bulkRequestBuilder.execute().actionGet();
+		}
+	}
+	
+//	public <T> void delete(DeleteQuery deleteQuery, String index,String type) {
+//
+//		Integer pageSize = deleteQuery.getPageSize() != null ? deleteQuery.getPageSize() : 1000;
+//		Long scrollTimeInMillis = deleteQuery.getScrollTimeInMillis() != null ? deleteQuery.getScrollTimeInMillis() : 10000l;
+//
+//		SearchQuery searchQuery = new NativeSearchQueryBuilder().withQuery(deleteQuery.getQuery())
+//				.withIndices(index)
+//				.withTypes(type)
+//				.withPageable(new PageRequest(0, pageSize))
+//				.build();
+//
+//		String scrollId = scan(searchQuery, scrollTimeInMillis, true);
+//
+//		BulkRequestBuilder bulkRequestBuilder = getClient().prepareBulk();
+//		List<String> ids = new ArrayList<String>();
+//		boolean hasRecords = true;
+//		while (hasRecords) {
+//			Page<String> page = scroll(scrollId, scrollTimeInMillis, new SearchResultMapper() {
+//				@Override
+//				public <T> Page<T> mapResults(SearchResponse response, Class<T> clazz, Pageable pageable) {
+//					List<String> result = new ArrayList<String>();
+//					for (SearchHit searchHit : response.getHits()) {
+//						String id = searchHit.getId();
+//						result.add(id);
+//					}
+//					if (result.size() > 0) {
+//						return new PageImpl<T>((List<T>) result);
+//					}
+//					return null;
+//				}
+//			});
+//			if (page != null && page.getContent().size() > 0) {
+//				ids.addAll(page.getContent());
+//			} else {
+//				hasRecords = false;
+//			}
+//		}
+//
+//		for(String id : ids) {
+//			bulkRequestBuilder.add(getClient().prepareDelete(index, type, id));
+//		}
+//
+//		if(bulkRequestBuilder.numberOfActions() > 0) {
+//			bulkRequestBuilder.execute().actionGet();
+//		}
+//
+//		clearScroll(scrollId);
+//	}
+	
+	public void clearScroll(String scrollId) {
+		getClient().prepareClearScroll().addScrollId(scrollId).execute().actionGet();
 	}
 }
