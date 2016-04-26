@@ -19,6 +19,7 @@ import org.elasticsearch.action.index.IndexRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.common.xcontent.XContentBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 
 import com.lufax.esearch.client.ElasticsearchClientFactory;
@@ -154,54 +155,54 @@ public class ElasticsearchTemplate {
 		}
 	}
 	
-//	public <T> void delete(DeleteQuery deleteQuery, String index,String type) {
-//
-//		Integer pageSize = deleteQuery.getPageSize() != null ? deleteQuery.getPageSize() : 1000;
-//		Long scrollTimeInMillis = deleteQuery.getScrollTimeInMillis() != null ? deleteQuery.getScrollTimeInMillis() : 10000l;
-//
-//		SearchQuery searchQuery = new NativeSearchQueryBuilder().withQuery(deleteQuery.getQuery())
-//				.withIndices(index)
-//				.withTypes(type)
-//				.withPageable(new PageRequest(0, pageSize))
-//				.build();
-//
-//		String scrollId = scan(searchQuery, scrollTimeInMillis, true);
-//
-//		BulkRequestBuilder bulkRequestBuilder = getClient().prepareBulk();
-//		List<String> ids = new ArrayList<String>();
-//		boolean hasRecords = true;
-//		while (hasRecords) {
-//			Page<String> page = scroll(scrollId, scrollTimeInMillis, new SearchResultMapper() {
-//				@Override
-//				public <T> Page<T> mapResults(SearchResponse response, Class<T> clazz, Pageable pageable) {
-//					List<String> result = new ArrayList<String>();
-//					for (SearchHit searchHit : response.getHits()) {
-//						String id = searchHit.getId();
-//						result.add(id);
-//					}
-//					if (result.size() > 0) {
-//						return new PageImpl<T>((List<T>) result);
-//					}
-//					return null;
-//				}
-//			});
-//			if (page != null && page.getContent().size() > 0) {
-//				ids.addAll(page.getContent());
-//			} else {
-//				hasRecords = false;
-//			}
-//		}
-//
-//		for(String id : ids) {
-//			bulkRequestBuilder.add(getClient().prepareDelete(index, type, id));
-//		}
-//
-//		if(bulkRequestBuilder.numberOfActions() > 0) {
-//			bulkRequestBuilder.execute().actionGet();
-//		}
-//
-//		clearScroll(scrollId);
-//	}
+	public <T> void delete(DeleteQuery deleteQuery, String index,String type) {
+
+		Integer pageSize = deleteQuery.getPageSize() != null ? deleteQuery.getPageSize() : 1000;
+		Long scrollTimeInMillis = deleteQuery.getScrollTimeInMillis() != null ? deleteQuery.getScrollTimeInMillis() : 10000l;
+		
+		SearchQuery searchQuery = new NativeSearchQueryBuilder().withQuery(deleteQuery.getQuery())
+				.withIndices(index)
+				.withTypes(type)
+				.withPageable(new PageRequest(0, pageSize))
+				.build();
+
+		String scrollId = scan(searchQuery, scrollTimeInMillis, true);
+
+		BulkRequestBuilder bulkRequestBuilder = getClient().prepareBulk();
+		List<String> ids = new ArrayList<String>();
+		boolean hasRecords = true;
+		while (hasRecords) {
+			Page<String> page = scroll(scrollId, scrollTimeInMillis, new SearchResultMapper() {
+				@Override
+				public <T> Page<T> mapResults(SearchResponse response, Class<T> clazz, Pageable pageable) {
+					List<String> result = new ArrayList<String>();
+					for (SearchHit searchHit : response.getHits()) {
+						String id = searchHit.getId();
+						result.add(id);
+					}
+					if (result.size() > 0) {
+						return new PageImpl<T>((List<T>) result);
+					}
+					return null;
+				}
+			});
+			if (page != null && page.getContent().size() > 0) {
+				ids.addAll(page.getContent());
+			} else {
+				hasRecords = false;
+			}
+		}
+
+		for(String id : ids) {
+			bulkRequestBuilder.add(getClient().prepareDelete(index, type, id));
+		}
+
+		if(bulkRequestBuilder.numberOfActions() > 0) {
+			bulkRequestBuilder.execute().actionGet();
+		}
+
+		clearScroll(scrollId);
+	}
 	
 	public void clearScroll(String scrollId) {
 		getClient().prepareClearScroll().addScrollId(scrollId).execute().actionGet();

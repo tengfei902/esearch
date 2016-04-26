@@ -3,7 +3,6 @@ package com.lufax.esearch.core.query.builder;
 import com.lufax.esearch.core.query.IndexQuery;
 
 public class IndexQueryBuilder {
-
 	private String id;
 	private Object object;
 	private Long version;
@@ -11,7 +10,7 @@ public class IndexQueryBuilder {
 	private String type;
 	private String source;
 	private String parentId;
-
+	
 	public IndexQueryBuilder withId(String id) {
 		this.id = id;
 		return this;

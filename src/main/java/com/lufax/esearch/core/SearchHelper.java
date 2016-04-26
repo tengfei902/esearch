@@ -5,7 +5,7 @@ import java.util.List;
 import com.lufax.esearch.client.ElasticsearchClientFactory;
 import com.lufax.esearch.config.SearchEntity;
 import com.lufax.esearch.config.SearchEntityRegister;
-import com.lufax.esearch.core.query.IndexQueryBuilderUtil;
+import com.lufax.esearch.core.query.builder.IndexQueryBuilderUtil;
 import com.lufax.esearch.domain.BaseSearchDomain;
 import com.lufax.esearch.exception.ESearchException;
 import com.lufax.esearch.search.SearchCondition;

@@ -1,9 +1,10 @@
-package com.lufax.esearch.core.query;
+package com.lufax.esearch.core.query.builder;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.lufax.esearch.config.SearchEntity;
+import com.lufax.esearch.core.query.IndexQuery;
 import com.lufax.esearch.domain.BaseSearchDomain;
 
 public class IndexQueryBuilderUtil {
