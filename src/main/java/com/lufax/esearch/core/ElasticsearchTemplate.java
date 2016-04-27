@@ -25,9 +25,11 @@ import org.elasticsearch.search.SearchHit;
 import com.lufax.esearch.client.ElasticsearchClientFactory;
 import com.lufax.esearch.config.SearchEntity;
 import com.lufax.esearch.config.SearchEntityRegister;
+import com.lufax.esearch.core.page.PageRequest;
 import com.lufax.esearch.core.query.DeleteQuery;
 import com.lufax.esearch.core.query.IndexQuery;
 import com.lufax.esearch.core.query.SearchQuery;
+import com.lufax.esearch.core.query.builder.NativeSearchQueryBuilder;
 import com.lufax.esearch.exception.ESearchException;
 
 public class ElasticsearchTemplate {

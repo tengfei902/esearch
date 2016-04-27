@@ -8,6 +8,7 @@ import org.elasticsearch.action.search.SearchType;
 
 import com.lufax.esearch.core.page.PageRequest;
 import com.lufax.esearch.core.page.Pageable;
+import com.lufax.esearch.core.query.sort.Sort;
 
 public interface Query {
 	

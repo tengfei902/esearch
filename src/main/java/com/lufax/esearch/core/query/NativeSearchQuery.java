@@ -57,12 +57,10 @@ public class NativeSearchQuery extends AbstractQuery implements SearchQuery {
 		return sorts;
 	}
 
-	@Override
 	public HighlightBuilder.Field[] getHighlightFields() {
 		return highlightFields;
 	}
 
-    @Override
     public List<ScriptField> getScriptFields() { return scriptFields; }
 
     public void setScriptFields(List<ScriptField> scriptFields) {
@@ -89,7 +87,6 @@ public class NativeSearchQuery extends AbstractQuery implements SearchQuery {
 		return facets;
 	}*/
 
-	@Override
 	public List<AbstractAggregationBuilder> getAggregations() {
 		return aggregations;
 	}
@@ -106,7 +103,6 @@ public class NativeSearchQuery extends AbstractQuery implements SearchQuery {
 		this.aggregations = aggregations;
 	}
 
-	@Override
 	public List<IndexBoost> getIndicesBoost() {
 		return indicesBoost;
 	}

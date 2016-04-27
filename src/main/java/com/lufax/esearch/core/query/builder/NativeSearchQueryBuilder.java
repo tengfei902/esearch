@@ -14,6 +14,7 @@ import org.elasticsearch.search.sort.SortBuilder;
 
 import com.lufax.esearch.core.page.Pageable;
 import com.lufax.esearch.core.query.IndexBoost;
+import com.lufax.esearch.core.query.NativeSearchQuery;
 import com.lufax.esearch.core.query.SourceFilter;
 import com.lufax.esearch.core.script.ScriptField;
 
