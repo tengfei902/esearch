@@ -33,7 +33,6 @@ public abstract class AbstractQuery implements Query {
 	}
 
 	public final <T extends Query> T setPageable(Pageable pageable) {
-		Assert.notNull(pageable);
 		this.pageable = pageable;
 		return (T) this.addSort(pageable.getSort());
 	}

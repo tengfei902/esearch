@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static org.springframework.util.CollectionUtils.isEmpty;
-
 import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.search.aggregations.AbstractAggregationBuilder;
@@ -17,6 +15,7 @@ import com.lufax.esearch.core.query.IndexBoost;
 import com.lufax.esearch.core.query.NativeSearchQuery;
 import com.lufax.esearch.core.query.SourceFilter;
 import com.lufax.esearch.core.script.ScriptField;
+import static org.apache.commons.collections.CollectionUtils.isEmpty;;
 
 public class NativeSearchQueryBuilder {
 

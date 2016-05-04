@@ -17,7 +17,6 @@ package com.lufax.esearch.core;
 
 import static org.apache.commons.lang.StringUtils.*;
 import static org.elasticsearch.common.xcontent.XContentFactory.*;
-import static org.springframework.util.StringUtils.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -70,7 +69,7 @@ class MappingBuilder {
 		searchEntity = SearchEntityRegister.findSearchEntity(clazz);
 		XContentBuilder mapping = jsonBuilder().startObject().startObject(indexType);
 		// Parent
-		if (hasText(parentType)) {
+		if (isEmpty(parentType)) {
 			mapping.startObject(FIELD_PARENT).field(FIELD_TYPE, parentType).endObject();
 		}
 
