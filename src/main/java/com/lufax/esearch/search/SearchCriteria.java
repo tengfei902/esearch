@@ -8,7 +8,7 @@ public class SearchCriteria {
 	private SearchType searchType;
 	
 	public enum SearchType{
-		AND,OR,NOT
+		MUST,SHOULD,MUST_NOT
 	}
 	
 	public SearchCriteria(SearchParam param,SearchType searchType) {

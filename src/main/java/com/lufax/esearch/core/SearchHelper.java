@@ -115,11 +115,11 @@ public class SearchHelper {
 	}
 	
 	public <T extends BaseSearchDomain> List<T> searchByCondition(SearchCondition condition,Class<T> dataType) {
-		return null;
+		return searchByCondition(condition, getSearchEntityByDataType(dataType));
 	}
 	
 	public <T extends BaseSearchDomain> List<T> searchByCondition(SearchCondition condition,SearchEntity<T> searchEntity) {
-		return null;
+		elasticsearchTemplate.se
 	}
 	
 	private Integer getCurrentIndexVersion(SearchEntity searchEntity) {

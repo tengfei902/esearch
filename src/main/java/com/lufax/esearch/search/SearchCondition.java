@@ -8,10 +8,10 @@ import com.lufax.esearch.search.SearchCriteria.SearchType;
 
 public class SearchCondition {
 	private boolean countOnly = false;
-	private List<String> fields;
+	private String[] fields;
 	private List<SearchCriteria> criterias = new ArrayList<SearchCriteria>();
 	private List<SearchSort> sortList = new ArrayList<SearchSort>();
-	private List<String> highLightFields;
+	private String[] highLightFields;
 	private long startNum;
 	private long endNum;
 	
@@ -28,7 +28,7 @@ public class SearchCondition {
 		return this;
 	}
 	
-	public SearchCondition withFields(List<String> fields) {
+	public SearchCondition withFields(String... fields) {
 		this.fields = fields;
 		return this;
 	}
@@ -38,7 +38,7 @@ public class SearchCondition {
 		return this;
 	}
 	
-	public SearchCondition withHighlight(List<String> highLightFields) {
+	public SearchCondition withHighlight(String... highLightFields) {
 		this.highLightFields = highLightFields;
 		return this;
 	}
@@ -53,39 +53,67 @@ public class SearchCondition {
 		return this;
 	}
 	
-	public SearchCondition and(SearchParam param) {
-		SearchCriteria criteria = new SearchCriteria(param, SearchType.AND);
+	public SearchCondition must(SearchParam param) {
+		SearchCriteria criteria = new SearchCriteria(param, SearchType.MUST);
 		this.criterias.add(criteria);
 		return this;
 	}
 	
-	public SearchCondition and(List<SearchParam> params) {
-		SearchCriteria criteria = new SearchCriteria(params,SearchType.AND);
+	public SearchCondition must(List<SearchParam> params) {
+		SearchCriteria criteria = new SearchCriteria(params,SearchType.MUST);
 		this.criterias.add(criteria);
 		return this;
 	}
 	
-	public SearchCondition or(SearchParam param) {
-		SearchCriteria criteria = new SearchCriteria(param,SearchType.OR);
+	public SearchCondition should(SearchParam param) {
+		SearchCriteria criteria = new SearchCriteria(param,SearchType.SHOULD);
 		this.criterias.add(criteria);
 		return this;
 	}
 	
-	public SearchCondition or(List<SearchParam> params) {
-		SearchCriteria criteria = new SearchCriteria(params,SearchType.OR);
+	public SearchCondition should(List<SearchParam> params) {
+		SearchCriteria criteria = new SearchCriteria(params,SearchType.SHOULD);
 		this.criterias.add(criteria);
 		return this;
 	}
 	
-	public SearchCondition not(SearchParam param) {
-		SearchCriteria criteria = new SearchCriteria(param,SearchType.NOT);
+	public SearchCondition mustNot(SearchParam param) {
+		SearchCriteria criteria = new SearchCriteria(param,SearchType.MUST_NOT);
 		this.criterias.add(criteria);
 		return this;
 	}
 	
-	public SearchCondition not(List<SearchParam> params) {
-		SearchCriteria criteria = new SearchCriteria(params,SearchType.NOT);
+	public SearchCondition mustNot(List<SearchParam> params) {
+		SearchCriteria criteria = new SearchCriteria(params,SearchType.MUST_NOT);
 		this.criterias.add(criteria);
 		return this;
+	}
+
+	public boolean isCountOnly() {
+		return countOnly;
+	}
+
+	public String[] getFields() {
+		return fields;
+	}
+
+	public List<SearchCriteria> getCriterias() {
+		return criterias;
+	}
+
+	public List<SearchSort> getSortList() {
+		return sortList;
+	}
+
+	public String[] getHighLightFields() {
+		return highLightFields;
+	}
+
+	public long getStartNum() {
+		return startNum;
+	}
+
+	public long getEndNum() {
+		return endNum;
 	}
 }
